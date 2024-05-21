@@ -1,0 +1,55 @@
+@import url("../../index.css");
+
+.mainContainer {
+  height: 80vh;
+  width: 80vw;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.logoText {
+  font-family: var(--logo-font-family);
+  font-size: 100px;
+  color: var(--logo-text-color);
+}
+
+.switchContainer {
+  width: 40%;
+  height: 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.button {
+  width: 50%;
+  height: 100%;
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+}
+
+.selected {
+  width: 50%;
+  height: 100%;
+  border-radius: 10px;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 0px 50px rgba(0, 25, 255, 0.24);
+}
+
+.loginRegisterContainer {
+  height: 50%;
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
