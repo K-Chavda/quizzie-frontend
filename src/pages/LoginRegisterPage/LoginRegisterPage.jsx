@@ -32,7 +32,7 @@ function LoginRegisterPage() {
         </button>
       </div>
       <div className={styles.loginRegisterContainer}>
-        {activeTab === "Sign-Up" && <Register />}
+        {activeTab === "Sign-Up" && <Register setActiveTab={setActiveTab} />}
         {activeTab === "Login" && <Login />}
       </div>
     </div>

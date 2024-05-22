@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "./Register.module.css";
+import { showToast } from "../../../components/Toast/Toast";
 
-function Register() {
+function Register({ setActiveTab }) {
   const [value, setValue] = useState({
     name: "",
     email: "",
@@ -56,6 +58,43 @@ function Register() {
           ? "password doesn't match"
           : "",
     }));
+
+    if (name && email && password && confirmPassword) {
+      handleUserRegistation();
+    }
+  };
+
+  const handleUserRegistation = async () => {
+    console.log(
+      `${error.name} ${error.email} ${error.password} ${error.confirmPassword}`
+    );
+    if (error.name || error.email || error.password || error.confirmPassword) {
+      return;
+    }
+
+    const { name, email, password } = value;
+
+    if (!name || !email || !password) {
+      return;
+    }
+
+    try {
+      await axios
+        .post("http://localhost:3000/api/v1/user/register", {
+          name: name,
+          email: email,
+          password: password,
+        })
+        .then((data) => {
+          showToast(data.data.message, "success");
+          setActiveTab("Login");
+        })
+        .catch((error) => {
+          showToast(error.response.data.message, "error");
+        });
+    } catch (error) {
+      showToast("Something Went Wrong!", "error");
+    }
   };
 
   return (

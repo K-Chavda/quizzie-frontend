@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { showToast } from "../../../components/Toast/Toast";
 import styles from "./Login.module.css";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState({
     email: "",
     password: "",
@@ -37,6 +42,39 @@ function Login() {
       ...prevError,
       password: !password ? "Please enter your password" : "",
     }));
+
+    if (email && password) {
+      handleUserLogin();
+    }
+  };
+
+  const handleUserLogin = async () => {
+    if (error.email || error.password) {
+      return;
+    }
+
+    const { email, password } = value;
+
+    if (!email || !password) {
+      return;
+    }
+
+    try {
+      await axios
+        .post("http://localhost:3000/api/v1/user/login", {
+          email: email,
+          password: password,
+        })
+        .then((data) => {
+          localStorage.setItem("token", data.data.token);
+          navigate("/home");
+        })
+        .catch((error) => {
+          showToast(error.response.data.message, "error");
+        });
+    } catch (error) {
+      showToast("Something Went Wrong!", "error");
+    }
   };
 
   return (
