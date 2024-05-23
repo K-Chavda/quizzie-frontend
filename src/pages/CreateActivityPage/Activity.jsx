@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./Analytics.module.css";
+import styles from "./Activity.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 
-function Analytics() {
+function Activity() {
   return (
     <>
       <div className={styles.mainContainer}>
@@ -12,4 +12,4 @@ function Analytics() {
   );
 }
 
-export default Analytics;
+export default Activity;

@@ -2,7 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainerComponent } from "./components/Toast/Toast";
 
 import LoginRegister from "./pages/LoginRegisterPage/LoginRegisterPage";
-import Home from "./pages/HomePage/Home";
+import Dashboard from "./pages/DashboardPage/Dashboard";
+import Analytics from "./pages/AnalyticsPage/Analytics";
+import Activity from "./pages/CreateActivityPage/Activity";
 
 const router = createBrowserRouter([
   {
@@ -10,8 +12,17 @@ const router = createBrowserRouter([
     element: <LoginRegister />,
   },
   {
-    path: "/home",
-    element: <Home />,
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
+  {
+    path: "/analytics",
+    element: <Analytics />,
+  },
+
+  {
+    path: "/create",
+    element: <Activity />,
   },
 ]);
 

@@ -67,7 +67,7 @@ function Login() {
         })
         .then((data) => {
           localStorage.setItem("token", data.data.token);
-          navigate("/home");
+          navigate("/dashboard");
         })
         .catch((error) => {
           showToast(error.response.data.message, "error");
