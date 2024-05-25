@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./Register.module.css";
+import BASE_URL from "../../../utils/Constants";
 import { showToast } from "../../../components/Toast/Toast";
 
 function Register({ setActiveTab }) {
@@ -80,7 +81,7 @@ function Register({ setActiveTab }) {
 
     try {
       await axios
-        .post("http://localhost:3000/api/v1/user/register", {
+        .post(`${BASE_URL}/user/register`, {
           name: name,
           email: email,
           password: password,

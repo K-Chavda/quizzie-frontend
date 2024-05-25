@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../components/Toast/Toast";
+import BASE_URL from "../../../utils/Constants";
 import styles from "./Login.module.css";
 
 function Login() {
@@ -61,12 +62,13 @@ function Login() {
 
     try {
       await axios
-        .post("http://localhost:3000/api/v1/user/login", {
+        .post(`${BASE_URL}/user/login`, {
           email: email,
           password: password,
         })
         .then((data) => {
           localStorage.setItem("token", data.data.token);
+          localStorage.setItem("userId", data.data.data[0].id);
           navigate("/dashboard");
         })
         .catch((error) => {

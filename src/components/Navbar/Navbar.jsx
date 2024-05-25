@@ -39,7 +39,7 @@ function Navbar() {
                   ? `${styles.navLink} ${styles.selected}`
                   : styles.navLink
               }
-              to="/create"
+              to="/createActivity"
             >
               Create Quiz
             </NavLink>
