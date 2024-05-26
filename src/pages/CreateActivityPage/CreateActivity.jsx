@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CreateActivity.module.css";
 import Navbar from "../../components/Navbar/Navbar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { showToast } from "../../components/Toast/Toast";
 
 function CreateActivity() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [value, setValue] = useState({
-    quizName: "",
-    quizType: "",
+    quizName: location.state ? location.state.quizName : "",
+    quizType: location.state ? location.state.quizType : "",
   });
 
   const [error, setError] = useState({
@@ -46,18 +48,22 @@ function CreateActivity() {
       }));
     }
 
-    if (error.quizType) {
-      showToast(error.quizType, "error");
-    }
-
-    if ((quizName, quizType)) {
-      // createQuizModel
+    if (quizName && quizType) {
+      navigate("/createQuestions", {
+        state: { quizName: quizName, quizType: quizType },
+      });
     }
   };
 
   const handleCancelBtnClick = () => {
     navigate("/Dashboard");
   };
+
+  useEffect(() => {
+    if (error.quizType) {
+      showToast(error.quizType, "error");
+    }
+  }, [error, setError]);
 
   return (
     <div className={styles.mainContainer}>

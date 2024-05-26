@@ -5,6 +5,7 @@ import LoginRegister from "./pages/LoginRegisterPage/LoginRegisterPage";
 import Dashboard from "./pages/DashboardPage/Dashboard";
 import Analytics from "./pages/AnalyticsPage/Analytics";
 import Activity from "./pages/CreateActivityPage/CreateActivity";
+import CreateQuestions from "./pages/CreateQuestionsPage/CreateQuestions";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/createActivity" element={<Activity />} />
+          <Route path="/createQuestions" element={<CreateQuestions />} />
         </Routes>
       </BrowserRouter>
       <ToastContainerComponent />
