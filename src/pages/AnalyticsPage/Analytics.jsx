@@ -5,8 +5,12 @@ import AnalyticsTable from "../../components/Analytics/AnalyticsTable";
 import BASE_URL from "../../utils/Constants";
 import { showToast } from "../../components/Toast/Toast";
 import axios from "axios";
+import { Outlet, useLocation } from "react-router-dom";
 
 function Analytics() {
+  const location = useLocation();
+  const isNested = location.pathname.includes("/analytics/questionAnalysis");
+
   const [activityId, setActivitiesId] = useState("");
   const [activitiesData, setActivitiesData] = useState([]);
   const [modelVisibility, setModelVisibility] = useState(false);
@@ -40,7 +44,7 @@ function Analytics() {
     try {
       const response = await axios.delete(`${BASE_URL}/activity/${activityId}`);
       showToast(response.data.message, "success");
-      fetchData(); // Fetch data again after successful delete
+      fetchData();
       setModelVisibility(!modelVisibility);
     } catch (error) {
       const errorMessage =
@@ -60,33 +64,44 @@ function Analytics() {
 
   return (
     <>
-      <div className={styles.mainContainer}>
-        <Navbar />
-        <div className={styles.activityTableContainer}>
-          <AnalyticsTable
-            activityData={activitiesData}
-            deleteActivity={handleDeleteBtnClick}
-          />
-        </div>
-      </div>
-      <div className={modelVisibility ? styles.modelContainer : styles.close}>
-        <div className={styles.modelContent}>
-          <div className={styles.message}>
-            Are you confirm you want to delete ?
+      {!isNested ? (
+        <>
+          <div className={styles.mainContainer}>
+            <Navbar />
+            <div className={styles.activityTableContainer}>
+              <AnalyticsTable
+                activityData={activitiesData}
+                deleteActivity={handleDeleteBtnClick}
+              />
+            </div>
           </div>
-          <div className={styles.footerContainer}>
-            <button className={styles.deleteButton} onClick={deleteActivity}>
-              Confirn Delete
-            </button>
-            <button
-              className={styles.cancelButton}
-              onClick={handleCancelBtnClick}
-            >
-              Cancel
-            </button>
+          <div
+            className={modelVisibility ? styles.modelContainer : styles.close}
+          >
+            <div className={styles.modelContent}>
+              <div className={styles.message}>
+                Are you confirm you want to delete ?
+              </div>
+              <div className={styles.footerContainer}>
+                <button
+                  className={styles.deleteButton}
+                  onClick={deleteActivity}
+                >
+                  Confirn Delete
+                </button>
+                <button
+                  className={styles.cancelButton}
+                  onClick={handleCancelBtnClick}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <Outlet />
+      )}
     </>
   );
 }

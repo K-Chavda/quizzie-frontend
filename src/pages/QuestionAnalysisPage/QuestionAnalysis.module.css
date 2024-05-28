@@ -1,0 +1,75 @@
+@import url("../../index.css");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.mainContainer {
+  height: 100vh;
+  width: 100vw;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: scroll;
+}
+
+.analyticsContainer {
+  height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 2rem;
+  overflow: scroll;
+}
+
+.quizDetailsContainer {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0rem 1rem;
+}
+
+.quizHeadingContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.quizHeading {
+  font-size: 40px;
+  font-weight: 500;
+  color: #5076ff;
+}
+
+.quizAnalyticContainer {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.quizAnalyticContainer span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ff5d01;
+}
+
+.quizComponentContainer {
+  height: 90%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}

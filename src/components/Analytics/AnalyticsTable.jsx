@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./AnalyticsTable.module.css";
 import FormatDate from "../../utils/FormatDate";
 import { FaRegEdit, FaTrashAlt, FaShareAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Outlet } from "react-router-dom";
 import { showToast } from "../Toast/Toast";
 
 const AnalyticsTable = ({ activityData, deleteActivity }) => {
@@ -26,6 +26,12 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
     } catch (err) {
       showToast("Couldn't copy link to clipboard", "error");
     }
+  };
+
+  const handleQuestionWiseAnalysisClick = ({ activityId, impression }) => {
+    navigate("/analytics/questionAnalysis", {
+      state: { activityId: activityId, impression: impression },
+    });
   };
 
   return (
@@ -75,9 +81,18 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
                 />
               </div>
               <div className={styles.cell}>
-                <a href="#" className={styles.analysisLink}>
+                <span
+                  className={styles.analysisLink}
+                  // to="/analytics/questionAnalysis"
+                  onClick={() => {
+                    handleQuestionWiseAnalysisClick({
+                      activityId: quiz._id,
+                      impression: quiz.impressions,
+                    });
+                  }}
+                >
                   Question Wise Analysis
-                </a>
+                </span>
               </div>
             </div>
           ))}
