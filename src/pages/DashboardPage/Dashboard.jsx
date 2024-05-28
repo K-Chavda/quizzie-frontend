@@ -81,13 +81,13 @@ const Dashboard = () => {
           <div className={styles.trendingText}>Trending Quizzes</div>
           <div className={styles.trendingCardContainer}>
             {trending.trendingQuiz.map(
-              ({ _id, title, impressions, createdAt }) => (
+              ({ _id, title, totalImpressions, createdAt }) => (
                 <div className={styles.trendingCard} key={_id}>
                   <div className={styles.cardContent}>
                     <div className={styles.activityName}>{title}</div>
                     <div className={styles.activityImpression}>
                       <span className={styles.impressionCount}>
-                        {impressions}
+                        {totalImpressions}
                       </span>
                       <span className={styles.impressionIcon}>
                         <img src={groupIcon} alt="Group.svg" />

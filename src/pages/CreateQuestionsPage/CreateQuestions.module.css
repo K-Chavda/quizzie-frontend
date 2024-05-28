@@ -361,6 +361,7 @@ input[type="radio"]:checked::before {
 .selected input {
   background-color: #60b84b;
   border-radius: 10px;
+  color: #ffffff;
 }
 
 .selected input::placeholder {

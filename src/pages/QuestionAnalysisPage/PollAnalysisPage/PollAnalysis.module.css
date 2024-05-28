@@ -1,0 +1,47 @@
+.analysisContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.questionBlock {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.questionBlock h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statBox {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.statBox:last-child {
+  margin-right: 0;
+}
+
+.statBox span {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+}
+
+.statBox p {
+  margin: 0;
+  color: #777;
+}

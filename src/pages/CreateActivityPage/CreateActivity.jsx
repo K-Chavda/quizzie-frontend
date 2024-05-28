@@ -3,54 +3,65 @@ import styles from "./CreateActivity.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showToast } from "../../components/Toast/Toast";
+import axios from "axios";
+import BASE_URL from "../../utils/Constants";
 
-function CreateActivity() {
+const CreateActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [value, setValue] = useState({
-    quizName: location.state ? location.state.quizName : "",
-    quizType: location.state ? location.state.quizType : "",
-  });
+  const [quizName, setQuizName] = useState(
+    location.state ? location.state.quizName : ""
+  );
+  const [quizType, setQuizType] = useState(
+    location.state ? location.state.quizType : ""
+  );
+  const [activityId, setActivityId] = useState(
+    location.state ? location.state.activityId : ""
+  );
+  const [error, setError] = useState({ quizName: "", quizType: "" });
 
-  const [error, setError] = useState({
-    quizName: "",
-    quizType: "",
-  });
+  useEffect(() => {
+    if (location.state && location.state.activityId) {
+      fetchActivityDetails(location.state.activityId);
+    }
+  }, []);
+
+  const fetchActivityDetails = async (activityId) => {
+    try {
+      const token = localStorage.getItem("token");
+      axios.defaults.headers.common["Authorization"] = token;
+      const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
+      if (response.status === 200) {
+        setQuizName(response.data.data.title);
+        setQuizType(response.data.data.activityType);
+      }
+    } catch (error) {
+      console.error("Error fetching activity details:", error);
+    }
+  };
 
   const handleChangeEvent = (e) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
-
-    setError((prevError) => ({
-      ...prevError,
-      quizName: "",
-      quizType: "",
-    }));
+    const { name, value } = e.target;
+    if (name === "quizName") {
+      setQuizName(value);
+      setError({ ...error, quizName: "" });
+    } else if (name === "quizType") {
+      setQuizType(value);
+      setError({ ...error, quizType: "" });
+    }
   };
 
   const handleContinueBtnClick = () => {
-    const { quizName, quizType } = value;
-
     if (!quizName) {
-      setError((prevError) => ({
-        ...prevError,
-        quizName: "Please enter quiz name",
-      }));
+      setError({ ...error, quizName: "Please enter quiz name" });
     }
-
     if (!quizType) {
-      setError((prevError) => ({
-        ...prevError,
-        quizType: "Please select quiz type",
-      }));
+      setError({ ...error, quizType: "Please select quiz type" });
     }
-
     if (quizName && quizType) {
       navigate("/createQuestions", {
-        state: { quizName: quizName, quizType: quizType },
+        state: { quizName, quizType, activityId: activityId },
       });
     }
   };
@@ -60,10 +71,10 @@ function CreateActivity() {
   };
 
   useEffect(() => {
-    if (error.quizType) {
-      showToast(error.quizType, "error");
+    if (error.quizType || error.quizName) {
+      showToast(error.quizType || error.quizName, "error");
     }
-  }, [error, setError]);
+  }, [error]);
 
   return (
     <div className={styles.mainContainer}>
@@ -76,11 +87,14 @@ function CreateActivity() {
                 type="text"
                 name="quizName"
                 id="quizName"
-                className={error.quizName ? styles.errorText : ""}
-                placeholder={error.quizName ? error.quizName : `Quiz name`}
-                value={value.quizName}
+                className={error.quizName && styles.errorText}
+                placeholder={error.quizName || "Quiz name"}
+                value={quizName}
                 onChange={handleChangeEvent}
               />
+              {error.quizName && (
+                <p className={styles.error}>{error.quizName}</p>
+              )}
             </div>
             <div className={styles.quizTypeInput}>
               <label>Quiz Type</label>
@@ -89,7 +103,7 @@ function CreateActivity() {
                 name="quizType"
                 id="QA"
                 value="QA"
-                checked={value.quizType === "QA"}
+                checked={quizType === "QA"}
                 onChange={handleChangeEvent}
               />
               <label htmlFor="QA">Q&A</label>
@@ -98,10 +112,13 @@ function CreateActivity() {
                 name="quizType"
                 id="POLL"
                 value="Poll"
-                checked={value.quizType === "Poll"}
+                checked={quizType === "Poll"}
                 onChange={handleChangeEvent}
               />
               <label htmlFor="POLL">Poll</label>
+              {error.quizType && (
+                <p className={styles.error}>{error.quizType}</p>
+              )}
             </div>
           </div>
           <div className={styles.modelFooterContainer}>
@@ -122,6 +139,6 @@ function CreateActivity() {
       </div>
     </div>
   );
-}
+};
 
 export default CreateActivity;

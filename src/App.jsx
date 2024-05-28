@@ -6,6 +6,7 @@ import Dashboard from "./pages/DashboardPage/Dashboard";
 import Analytics from "./pages/AnalyticsPage/Analytics";
 import Activity from "./pages/CreateActivityPage/CreateActivity";
 import CreateQuestions from "./pages/CreateQuestionsPage/CreateQuestions";
+import QuizPoll from "./pages/QuizPollPage/QuizPoll";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/createActivity" element={<Activity />} />
           <Route path="/createQuestions" element={<CreateQuestions />} />
+          <Route path="/quiz/:id" element={<QuizPoll />} />
         </Routes>
       </BrowserRouter>
       <ToastContainerComponent />

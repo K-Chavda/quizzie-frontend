@@ -1,0 +1,407 @@
+@import url("../../index.css");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.mainContainer {
+  background-color: #041325;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: scroll;
+}
+
+.quizContainer {
+  overflow: hidden;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.15);
+  padding: 1rem 2rem;
+  gap: 1rem;
+}
+
+.modelHeader {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 10px;
+}
+
+.modelHeader span {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  color: #474444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.questionContainer {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.question {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.question span {
+  font-size: 40px;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  text-align: left;
+  color: #474444;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.questionOptions {
+  width: 80%;
+  height: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  align-self: center;
+  gap: 1rem;
+}
+
+.optionCard {
+  width: 40%;
+  height: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  align-self: center;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid transparent;
+  gap: 0rem 1rem;
+}
+
+.imageCard {
+  width: 40%;
+  height: 35%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  align-self: center;
+  border: 2px solid transparent;
+  padding: 0;
+}
+
+.optionCard:hover,
+button {
+  cursor: pointer;
+}
+
+.optionCard input[type="radio"] {
+  display: none;
+}
+
+.optionCard label {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.optionCard input,
+.optionCard label {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.optionCard .left {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+}
+
+.optionCard img {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  border-radius: 10px;
+}
+
+.optionCard input[type="radio"]:checked + label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.optionCard input[type="radio"]:checked + label.left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.modelFooter {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modelFooter button {
+  height: 65%;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 10px;
+  background-color: #60b84b;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 400;
+  padding: 1rem 0rem;
+}
+
+.selected {
+  border: 2px solid #5076ff;
+}
+
+.imageCard.selected {
+  border: 4px solid #5076ff;
+  border-radius: 14px;
+}
+
+.quizResult {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.spanText,
+.scoreSpan,
+.scoreText {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: #474444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreSpan {
+  color: #60b84b;
+}
+
+.imageContainer {
+  height: 50%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* For Mobile Portrait View */
+@media screen and (max-device-width: 480px) and (orientation: portrait) {
+  .mainContainer {
+    background-color: transparent;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .quizContainer {
+    overflow: scroll;
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0rem;
+    border-radius: 0px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: none;
+    padding: 0rem 2rem;
+  }
+
+  .modelHeader {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0rem;
+    border-radius: 0px;
+  }
+
+  .modelHeader span {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    color: #474444;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .questionContainer {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .question {
+    width: 100%;
+    max-height: 30%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .question span {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: #474444;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    white-space: normal;
+  }
+
+  .questionOptions {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0rem;
+    flex-wrap: wrap;
+    align-self: center;
+    gap: 1rem;
+  }
+
+  .optionCard {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    margin: 0rem;
+    align-self: center;
+    gap: 1rem;
+  }
+
+  .modelFooter {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modelFooter button {
+    height: 50%;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+    background-color: #60b84b;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 1rem 0rem;
+  }
+
+  .selected {
+    border: 2px solid #5076ff;
+  }
+
+  .spanText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .scoreText {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #474444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .imageCard {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    margin: 0rem;
+    align-self: center;
+  }
+}
