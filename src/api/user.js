@@ -26,8 +26,8 @@ const LoginUser = async ({ email, password, navigate }) => {
       email,
       password,
     });
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("userId", response.data.data[0].id);
+    await localStorage.setItem("token", response.data.token);
+    await localStorage.setItem("userId", response.data.data[0].id);
     navigate("/dashboard");
   } catch (error) {
     showToast(
