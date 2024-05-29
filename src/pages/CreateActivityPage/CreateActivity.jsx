@@ -3,41 +3,31 @@ import styles from "./CreateActivity.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showToast } from "../../components/Toast/Toast";
-import axios from "axios";
-import BASE_URL from "../../utils/Constants";
+import { GetSingleActivity } from "../../api/activity";
 
 const CreateActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [quizName, setQuizName] = useState(
-    location.state ? location.state.quizName : ""
-  );
-  const [quizType, setQuizType] = useState(
-    location.state ? location.state.quizType : ""
-  );
-  const [activityId, setActivityId] = useState(
-    location.state ? location.state.activityId : ""
-  );
+  const [quizName, setQuizName] = useState(location.state?.quizName || "");
+  const [quizType, setQuizType] = useState(location.state?.quizType || "");
+  const activityId = location.state?.activityId || "";
   const [error, setError] = useState({ quizName: "", quizType: "" });
 
   useEffect(() => {
-    if (location.state && location.state.activityId) {
-      fetchActivityDetails(location.state.activityId);
+    if (activityId) {
+      fetchActivityDetails(activityId);
     }
-  }, []);
+  }, [activityId]);
 
   const fetchActivityDetails = async (activityId) => {
     try {
-      const token = localStorage.getItem("token");
-      axios.defaults.headers.common["Authorization"] = token;
-      const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
-      if (response.status === 200) {
-        setQuizName(response.data.data.title);
-        setQuizType(response.data.data.activityType);
-      }
+      const response = await GetSingleActivity(activityId);
+      setQuizName(response.title);
+      setQuizType(response.activityType);
     } catch (error) {
       console.error("Error fetching activity details:", error);
+      showToast("Failed to fetch activity details", "error");
     }
   };
 
@@ -60,8 +50,9 @@ const CreateActivity = () => {
       setError({ ...error, quizType: "Please select quiz type" });
     }
     if (quizName && quizType) {
+      localStorage.removeItem("questions");
       navigate("/createQuestions", {
-        state: { quizName, quizType, activityId: activityId },
+        state: { quizName, quizType, activityId },
       });
     }
   };

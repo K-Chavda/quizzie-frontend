@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { RegisterUser } from "../../../api/user";
+
 import styles from "./Register.module.css";
-import BASE_URL from "../../../utils/Constants";
-import { showToast } from "../../../components/Toast/Toast";
 
 function Register({ setActiveTab }) {
   const [value, setValue] = useState({
@@ -79,23 +78,7 @@ function Register({ setActiveTab }) {
       return;
     }
 
-    try {
-      await axios
-        .post(`${BASE_URL}/user/register`, {
-          name: name,
-          email: email,
-          password: password,
-        })
-        .then((data) => {
-          showToast(data.data.message, "success");
-          setActiveTab("Login");
-        })
-        .catch((error) => {
-          showToast(error.response.data.message, "error");
-        });
-    } catch (error) {
-      showToast("Something Went Wrong!", "error");
-    }
+    await RegisterUser({ name, email, password, setActiveTab });
   };
 
   return (

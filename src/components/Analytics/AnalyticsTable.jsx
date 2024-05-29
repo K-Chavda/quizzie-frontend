@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./AnalyticsTable.module.css";
 import FormatDate from "../../utils/FormatDate";
 import { FaRegEdit, FaTrashAlt, FaShareAlt } from "react-icons/fa";
-import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { showToast } from "../Toast/Toast";
 
 const AnalyticsTable = ({ activityData, deleteActivity }) => {
@@ -10,7 +10,6 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
 
   const handleDeleteClick = (activityId) => {
     deleteActivity(activityId);
-    showToast("Activity deleted successfully", "success");
   };
 
   const handleEditClick = (activityId) => {
@@ -20,7 +19,9 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
   const handleShareClick = async (activityId) => {
     try {
       await navigator.clipboard.writeText(
-        `http://localhost:5173/quiz/${activityId}/`
+        `${import.meta.env.VITE_HOST}${
+          import.meta.env.VITE_PORT
+        }/quiz/${activityId}/`
       );
       showToast("Copied to clipboard", "success");
     } catch (err) {
@@ -47,55 +48,60 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
           <div className={styles.cell}></div>
         </div>
         <div className={styles.tableContainer}>
-          {activityData.map((quiz, index) => (
-            <div
-              key={index}
-              className={`${styles.row} ${
-                index % 2 === 0 ? styles.evenRow : styles.oddRow
-              }`}
-            >
-              <div className={styles.cell}>{index + 1}</div>
-              <div className={styles.cell}>{quiz.title}</div>
-              <div className={styles.cell}>{FormatDate(quiz.createdAt)}</div>
-              <div className={`${styles.cell} ${styles.tdNumber}`}>
-                {quiz.impressions}
+          {activityData && activityData.length > 0 ? (
+            activityData.map((quiz, index) => (
+              <div
+                key={index}
+                className={`${styles.row} ${
+                  index % 2 === 0 ? styles.evenRow : styles.oddRow
+                }`}
+              >
+                <div className={styles.cell}>{index + 1}</div>
+                <div className={styles.cell}>{quiz.title}</div>
+                <div className={styles.cell}>{FormatDate(quiz.createdAt)}</div>
+                <div className={`${styles.cell} ${styles.tdNumber}`}>
+                  {quiz.impressions}
+                </div>
+                <div className={styles.cell}>
+                  <FaRegEdit
+                    className={styles.icon}
+                    onClick={() => {
+                      handleEditClick(quiz._id);
+                    }}
+                  />
+                  <FaTrashAlt
+                    className={styles.icon}
+                    onClick={() => {
+                      handleDeleteClick(quiz._id);
+                    }}
+                  />
+                  <FaShareAlt
+                    className={styles.icon}
+                    onClick={() => {
+                      handleShareClick(quiz._id);
+                    }}
+                  />
+                </div>
+                <div className={styles.cell}>
+                  <span
+                    className={styles.analysisLink}
+                    onClick={() => {
+                      handleQuestionWiseAnalysisClick({
+                        activityId: quiz._id,
+                        impression: quiz.impressions,
+                      });
+                    }}
+                  >
+                    Question Wise Analysis
+                  </span>
+                </div>
               </div>
-              <div className={styles.cell}>
-                <FaRegEdit
-                  className={styles.icon}
-                  onClick={() => {
-                    handleEditClick(quiz._id);
-                  }}
-                />
-                <FaTrashAlt
-                  className={styles.icon}
-                  onClick={() => {
-                    handleDeleteClick(quiz._id);
-                  }}
-                />
-                <FaShareAlt
-                  className={styles.icon}
-                  onClick={() => {
-                    handleShareClick(quiz._id);
-                  }}
-                />
-              </div>
-              <div className={styles.cell}>
-                <span
-                  className={styles.analysisLink}
-                  // to="/analytics/questionAnalysis"
-                  onClick={() => {
-                    handleQuestionWiseAnalysisClick({
-                      activityId: quiz._id,
-                      impression: quiz.impressions,
-                    });
-                  }}
-                >
-                  Question Wise Analysis
-                </span>
-              </div>
+            ))
+          ) : (
+            <div className={styles.noDataMessage}>
+              No activity data available.
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

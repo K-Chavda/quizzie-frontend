@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Analytics.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import AnalyticsTable from "../../components/Analytics/AnalyticsTable";
-import BASE_URL from "../../utils/Constants";
-import { showToast } from "../../components/Toast/Toast";
-import axios from "axios";
 import { Outlet, useLocation } from "react-router-dom";
+import { GetActivity, DeleteActivity } from "../../api/activity";
+
+import styles from "./Analytics.module.css";
+import { showToast } from "../../components/Toast/Toast";
 
 function Analytics() {
   const location = useLocation();
@@ -15,42 +15,24 @@ function Analytics() {
   const [activitiesData, setActivitiesData] = useState([]);
   const [modelVisibility, setModelVisibility] = useState(false);
 
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-  axios.defaults.headers.common["Authorization"] = token;
-
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    try {
-      const response = await axios.post(`${BASE_URL}/activity/activities`, {
-        userId,
-      });
-
-      const activityData = response.data.data.activity;
-
-      setActivitiesData(activityData);
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Something Went Wrong!";
-      showToast(errorMessage, "error");
-      setActivitiesData([]);
-    }
+    GetActivity().then((activity) => {
+      setActivitiesData(activity);
+    });
   };
 
   const deleteActivity = async () => {
-    try {
-      const response = await axios.delete(`${BASE_URL}/activity/${activityId}`);
-      showToast(response.data.message, "success");
-      fetchData();
-      setModelVisibility(!modelVisibility);
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Something Went Wrong!";
-      showToast(errorMessage, "error");
-    }
+    await DeleteActivity(activityId).then((response) => {
+      if (response.success) {
+        showToast(response.message, "success");
+        setModelVisibility(!modelVisibility);
+      }
+    });
+    fetchData();
   };
 
   const handleDeleteBtnClick = (activityId) => {

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import Navbar from "../../components/Navbar/Navbar";
-import { showToast } from "../../components/Toast/Toast";
-import axios from "axios";
-import BASE_URL from "../../utils/Constants";
 import FormatDate from "../../utils/FormatDate";
 import { groupIcon } from "../../assets/icons";
+import { GetAnalytics, GetTrendingQuiz } from "../../api/activity";
 
 const Dashboard = () => {
   const [analytics, setAnalytics] = useState({
@@ -17,31 +15,22 @@ const Dashboard = () => {
   const [trending, setTrending] = useState({ trendingQuiz: [] });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    axios.defaults.headers.common["Authorization"] = token;
-
     const fetchData = async () => {
-      try {
-        const [analyticsResponse, trendingResponse] = await Promise.all([
-          axios.post(`${BASE_URL}/activity/analytics`, { userId }),
-          axios.post(`${BASE_URL}/activity/trending`, { userId }),
-        ]);
-
+      await GetAnalytics().then((response) => {
         const { totalImpressions, totalQuestions, totalQuizzesAndPolls } =
-          analyticsResponse.data.data;
+          response;
+
         setAnalytics({
           totalImpressions,
           totalQuestions,
           totalQuizzesAndPolls,
         });
+      });
 
-        setTrending(trendingResponse.data.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Something Went Wrong!";
-        showToast(errorMessage, "error");
-      }
+      await GetTrendingQuiz().then((response) => {
+        const { trendingQuiz } = response;
+        setTrending({ trendingQuiz });
+      });
     };
 
     fetchData();

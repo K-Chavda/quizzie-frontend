@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import QuizAnalysis from "./QuizAnalysisPage/QuizAnalysis";
-import PollAnalysis from "./PollAnalysisPage/PollAnalysis";
-import { useLocation, useParams } from "react-router-dom";
-import BASE_URL from "../../utils/Constants";
-import axios from "axios";
 import styles from "./QuestionAnalysis.module.css";
 import Navbar from "../../components/Navbar/Navbar";
+import QuizAnalysis from "./QuizAnalysisPage/QuizAnalysis";
+import PollAnalysis from "./PollAnalysisPage/PollAnalysis";
 import FormatDate from "../../utils/FormatDate";
+import { useLocation } from "react-router-dom";
+import { GetQuestionAnalytics } from "../../api/activity";
 
 const QuestionAnalysis = ({ data }) => {
   const location = useLocation();
@@ -23,31 +22,17 @@ const QuestionAnalysis = ({ data }) => {
   }, []);
 
   const fetchData = async () => {
-    const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = token;
-
-    try {
-      if (!activityId) {
-        return;
-      }
-
-      const response = await axios.post(
-        `${BASE_URL}/activity/analytics/${activityId}`
-      );
-
-      if (response && response.data && response.data.success) {
-        setQuestionData(response.data.data.activityAnalytics);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    await GetQuestionAnalytics(activityId)
+      .then((response) => {
+        const { activityAnalytics } = response.data;
+        setQuestionData(activityAnalytics);
+      })
+      .catch((error) => {});
   };
 
   useEffect(() => {
     fetchData();
   }, [activityId]);
-
-  // console.log(questionData);
 
   return (
     <div className={styles.mainContainer}>
@@ -72,7 +57,7 @@ const QuestionAnalysis = ({ data }) => {
           </div>
         </div>
         <div className={styles.quizComponentContainer}>
-          {questionData.activityType !== "QA" ? (
+          {questionData.activityType === "QA" ? (
             <QuizAnalysis questionData={questionData} />
           ) : (
             <PollAnalysis questionData={questionData} />

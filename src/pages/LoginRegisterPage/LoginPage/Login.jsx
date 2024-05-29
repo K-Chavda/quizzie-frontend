@@ -1,33 +1,17 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { showToast } from "../../../components/Toast/Toast";
-import BASE_URL from "../../../utils/Constants";
+import { LoginUser } from "../../../api/user";
+
 import styles from "./Login.module.css";
 
 function Login() {
   const navigate = useNavigate();
-
-  const [value, setValue] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-  });
+  const [value, setValue] = useState({ email: "", password: "" });
+  const [error, setError] = useState({ email: "", password: "" });
 
   const handleOnChange = (e) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
-
-    setError({
-      email: "",
-      password: "",
-    });
+    setValue({ ...value, [e.target.name]: e.target.value });
+    setError({ email: "", password: "" });
   };
 
   const handleLoginBtnClick = (e) => {
@@ -37,10 +21,6 @@ function Login() {
     setError((prevError) => ({
       ...prevError,
       email: !email ? "Invalid email" : "",
-    }));
-
-    setError((prevError) => ({
-      ...prevError,
       password: !password ? "Please enter your password" : "",
     }));
 
@@ -50,70 +30,47 @@ function Login() {
   };
 
   const handleUserLogin = async () => {
-    if (error.email || error.password) {
-      return;
-    }
+    if (error.email || error.password) return;
 
     const { email, password } = value;
+    if (!email || !password) return;
 
-    if (!email || !password) {
-      return;
-    }
-
-    try {
-      await axios
-        .post(`${BASE_URL}/user/login`, {
-          email: email,
-          password: password,
-        })
-        .then((data) => {
-          localStorage.setItem("token", data.data.token);
-          localStorage.setItem("userId", data.data.data[0].id);
-          navigate("/dashboard");
-        })
-        .catch((error) => {
-          showToast(error.response.data.message, "error");
-        });
-    } catch (error) {
-      showToast("Something Went Wrong!", "error");
-    }
+    await LoginUser({ email, password, navigate });
   };
 
   return (
-    <>
-      <div className={styles.mainContainer}>
-        <form className={styles.form}>
-          <div className={styles.formField}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder={error.email}
-              value={value.email}
-              onChange={handleOnChange}
-              className={error.email ? styles.errorBorder : ""}
-            />
-          </div>
-          <div className={styles.formField}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder={error.password}
-              value={value.password}
-              onChange={handleOnChange}
-              autoComplete="true"
-              className={error.password ? styles.errorBorder : ""}
-            />
-          </div>
-          <button className={styles.submitBtn} onClick={handleLoginBtnClick}>
-            Login
-          </button>
-        </form>
-      </div>
-    </>
+    <div className={styles.mainContainer}>
+      <form className={styles.form}>
+        <div className={styles.formField}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder={error.email}
+            value={value.email}
+            onChange={handleOnChange}
+            className={error.email ? styles.errorBorder : ""}
+          />
+        </div>
+        <div className={styles.formField}>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder={error.password}
+            value={value.password}
+            onChange={handleOnChange}
+            autoComplete="true"
+            className={error.password ? styles.errorBorder : ""}
+          />
+        </div>
+        <button className={styles.submitBtn} onClick={handleLoginBtnClick}>
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
 

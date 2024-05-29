@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import styles from "./QuizPoll.module.css";
 import trophyImage from "../../assets/images/Trophy.png";
-import BASE_URL from "../../utils/Constants";
+import {
+  IncreaseImpressionCount,
+  GetQuizData,
+  IncreaseAnswerCount,
+  IncreaseOptionImpression,
+} from "../../api/activity";
 
 function QuizPoll() {
   const { id } = useParams();
@@ -14,37 +18,25 @@ function QuizPoll() {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
 
-  const token = localStorage.getItem("token");
-  axios.defaults.headers.common["Authorization"] = token;
-
   useEffect(() => {
     const increaseQuestionImpression = async () => {
-      try {
-        await axios.put(
-          `${BASE_URL}/activity/activities/${id}/questions/${quizData.questions[questionIndex]._id}/increase-impression`
-        );
-      } catch (error) {
-        console.error("Error increasing question impression:", error);
-      }
+      await IncreaseImpressionCount(
+        id,
+        quizData.questions[questionIndex]._id
+      ).then((respose) => {});
     };
 
     if (quizData && quizData.questions.length > 0) {
       increaseQuestionImpression();
     }
-  }, [id, quizData, questionIndex]);
+  }, [id, quizData, questionIndex]); // Updated dependency array
 
   useEffect(() => {
     const fetchQuizData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/activity/${id}`);
-        const data = response.data.data;
-
+      GetQuizData(id).then((data) => {
         setQuizData(data);
-
         setQuestionIndex(0);
-      } catch (error) {
-        console.error("Error fetching quiz data:", error);
-      }
+      });
     };
 
     fetchQuizData();
@@ -58,30 +50,29 @@ function QuizPoll() {
   }, [quizData, questionIndex]);
 
   useEffect(() => {
-    const timerInterval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer > 0) {
-          return prevTimer - 1;
-        } else {
-          if (questionIndex + 1 === quizData.questions.length) {
-            setShowResult(true);
+    if (timer > 0 && !showResult) {
+      const timerInterval = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer > 0) {
+            return prevTimer - 1;
           } else {
-            setQuestionIndex((prevIndex) => prevIndex + 1);
-
-            setUserAnswers({});
-
-            const nextQuestionTimer =
-              quizData.questions[questionIndex + 1].timer;
-
-            setTimer(nextQuestionTimer);
+            if (questionIndex + 1 === quizData.questions.length) {
+              setShowResult(true);
+            } else {
+              setQuestionIndex((prevIndex) => prevIndex + 1);
+              setUserAnswers({});
+              const nextQuestionTimer =
+                quizData.questions[questionIndex + 1].timer;
+              setTimer(nextQuestionTimer);
+            }
+            return 0;
           }
-          return 0;
-        }
-      });
-    }, 1000);
+        });
+      }, 1000);
 
-    return () => clearInterval(timerInterval);
-  }, [timer, questionIndex, quizData]);
+      return () => clearInterval(timerInterval);
+    }
+  }, [timer, questionIndex, quizData, showResult]);
 
   const handleAnswerChange = async (optionIndex) => {
     setUserAnswers({
@@ -89,41 +80,21 @@ function QuizPoll() {
       [questionIndex]: optionIndex,
     });
 
-    // Increase option count on selection
-    const increaseOptionImpression = async () => {
-      try {
-        await axios.put(
-          `${BASE_URL}/activity/activities/${id}/questions/${quizData.questions[questionIndex]._id}/options/${quizData.questions[questionIndex].options[optionIndex]._id}/increase-impression`
-        );
-      } catch (error) {
-        console.error("Error increasing option impression:", error);
-      }
-    };
-
-    increaseOptionImpression();
+    await IncreaseOptionImpression(
+      id,
+      quizData.questions[questionIndex]._id,
+      quizData.questions[questionIndex].options[optionIndex]._id
+    );
 
     const correctOptionIndex = quizData.questions[
       questionIndex
     ].options.findIndex((option) => option.isCorrect);
 
     if (optionIndex === correctOptionIndex) {
-      try {
-        await axios.put(
-          `${BASE_URL}/activity/activities/${id}/questions/${quizData.questions[questionIndex]._id}/increase-answer-count/correct`
-        );
-      } catch (error) {
-        console.error("Error increasing correct answer count:", error);
-      }
-
+      IncreaseAnswerCount(id, quizData.questions[questionIndex]._id, "correct");
       setScore((prevScore) => prevScore + 1);
     } else {
-      try {
-        await axios.put(
-          `${BASE_URL}/activity/activities/${id}/questions/${quizData.questions[questionIndex]._id}/increase-answer-count/wrong`
-        );
-      } catch (error) {
-        console.error("Error increasing wrong answer count:", error);
-      }
+      IncreaseAnswerCount(id, quizData.questions[questionIndex]._id, "wrong");
     }
   };
 
@@ -149,11 +120,15 @@ function QuizPoll() {
           <>
             <div className={styles.modelHeader}>
               <span className={styles.questionNumber}>
-                0{questionIndex + 1}/04
+                0{questionIndex + 1}/0{quizData.questions.length}
               </span>
-              <span className={styles.questionTimer}>
-                00 : {timer > 9 ? timer : `0${timer}`}s
-              </span>
+              {quizData &&
+              quizData.activityType === "QA" &&
+              quizData.timer !== 0 ? (
+                <span className={styles.questionTimer}>
+                  00 : {timer > 9 ? timer : `0${timer ? timer : 0}`}s
+                </span>
+              ) : null}
             </div>
             <div className={styles.questionContainer}>
               <div className={styles.question}>

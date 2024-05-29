@@ -5,16 +5,14 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showToast } from "../../components/Toast/Toast";
-import axios from "axios";
-import BASE_URL from "../../utils/Constants";
+import { GetQuestionData, CreateOrModifyActivity } from "../../api/activity";
 
 function CreateQuestions() {
   const location = useLocation();
   const navigate = useNavigate();
   const { quizName, quizType } = location.state;
-  const token = localStorage.getItem("token");
-  axios.defaults.headers.common["Authorization"] = token;
-  const [activityId, setActivityId] = useState(location.state.activityId || "");
+
+  const activityId = location.state.activityId || "";
   const [selectedQuestion, setSelectedQuestion] = useState("");
 
   const [questions, setQuestions] = useState(() => {
@@ -119,70 +117,64 @@ function CreateQuestions() {
   useEffect(() => {
     if (activityId) {
       const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            `${BASE_URL}/activity/${activityId}`
-          );
-          if (response && response.data && response.data.success) {
-            const activityData = response.data.data;
-            // Map _id to id for questions
-            const updatedQuestions = activityData.questions.map((question) => ({
-              ...question,
-              id: question._id, // Map _id to id for question
-              options: question.options.map((option) => ({
-                ...option,
-                id: option._id, // Map _id to id for option
-              })),
-            }));
-            setQuestions(updatedQuestions);
-          } else {
-            showToast("Failed to fetch activity data", "error");
-          }
-        } catch (error) {
-          console.error("Error fetching activity data:", error);
-          showToast("Failed to fetch activity data", "error");
-        }
+        GetQuestionData(activityId).then((activityData) => {
+          const updatedQuestions = activityData.questions.map((question) => ({
+            ...question,
+            id: question._id,
+            options: question.options.map((option) => ({
+              ...option,
+              id: option._id,
+            })),
+          }));
+          setQuestions(updatedQuestions);
+        });
       };
       fetchData();
     }
   }, [activityId]);
 
   const handleCreateQuizBtnClick = async () => {
-    try {
-      let response;
-      if (activityId) {
-        response = await axios.patch(`${BASE_URL}/activity/${activityId}`, {
-          title: quizName,
-          activityType: quizType,
-          questions: questions,
-        });
-      } else {
-        response = await axios.post(`${BASE_URL}/activity/create`, {
-          title: quizName,
-          activityType: quizType,
-          questions: questions,
-        });
-      }
+    const isQuestion = questions.every((question) => question.question);
 
-      if (response && response.data) {
-        setActivityId(response.data.data._id);
-        showToast(response.data.message, "success");
-        navigate("/dashboard");
-      } else {
-        showToast("Something Went Wrong!", "error");
-      }
-    } catch (error) {
-      console.error(error);
-      showToast(
-        error.response?.data.message || "Something Went Wrong!",
-        "error"
-      );
+    if (!isQuestion) {
+      showToast("Please provide question for activity", "error");
+      return;
     }
+
+    const areOptionsFilled = questions.every((question) =>
+      question.options.every((option) => option.text || option.imageUrl)
+    );
+
+    if (!areOptionsFilled) {
+      showToast("Please provide option value", "error");
+      return;
+    }
+
+    if (quizType === "QA") {
+      const isCorrectAnswerSelected = questions.every((question) => {
+        return question.options.some((option) => option.isCorrect);
+      });
+
+      if (!isCorrectAnswerSelected) {
+        showToast("Please select at least one correct answer", "error");
+        return;
+      }
+    }
+
+    CreateOrModifyActivity({
+      activityId,
+      quizName,
+      quizType,
+      questions,
+    }).then((activity) => {
+      showToast(activity.message, "success");
+      navigate("/dashboard");
+    });
   };
 
   useEffect(() => {
     setSelectedQuestion(questions[questions.length - 1].id);
-  }, [questions]);
+  }, []);
 
   const selected = questions.filter(
     (question) => question.id === selectedQuestion
