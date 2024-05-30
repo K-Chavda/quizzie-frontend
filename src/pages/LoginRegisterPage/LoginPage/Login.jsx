@@ -38,9 +38,8 @@ function Login() {
 
     const loginPromise = LoginUser(email, password)
       .then((response) => {
-        console.log(response);
         localStorage.setItem("token", response.token);
-        localStorage.setItem("userId", response.data.id);
+        localStorage.setItem("userId", response.data.id || response.data[0].id);
         navigate("/dashboard");
         return response;
       })
