@@ -10,8 +10,9 @@ const GetActivity = async () => {
       userId: USERID,
     });
 
-    return response.data.data.activity;
+    return response.data?.data?.activity;
   } catch (error) {
+    console.log(error);
     showToast(
       error.response?.data?.message ||
         "Something went wrong while fetching activities!",
