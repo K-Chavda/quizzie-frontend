@@ -3,7 +3,6 @@ import styles from "./QuizAnalysis.module.css";
 import { v4 as uuidv4 } from "uuid";
 
 function QuizAnalysis({ questionData }) {
-  console.log(questionData);
   return (
     <>
       <div className={styles.mainContainer}>
