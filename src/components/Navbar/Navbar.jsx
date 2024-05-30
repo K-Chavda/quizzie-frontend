@@ -5,6 +5,10 @@ import { useNavigate, Link, NavLink } from "react-router-dom";
 function Navbar() {
   const navigate = useNavigate();
 
+  const handleLogoutClick = () => {
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <>
       <div className={styles.navbarContainer}>
@@ -46,7 +50,7 @@ function Navbar() {
           </div>
         </div>
         <div className={styles.logoutContainer}>
-          <div className={styles.login} onClick={() => navigate("/")}>
+          <div className={styles.login} onClick={handleLogoutClick}>
             LOGOUT
           </div>
         </div>

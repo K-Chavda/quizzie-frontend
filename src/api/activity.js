@@ -96,6 +96,7 @@ const GetAnalytics = async () => {
     const response = await axios.post(`${BASE_URL}/activity/analytics`, {
       userId: USERID,
     });
+
     return response.data?.data;
   } catch (error) {
     showToast(

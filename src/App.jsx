@@ -8,6 +8,7 @@ import Activity from "./pages/CreateActivityPage/CreateActivity";
 import CreateQuestions from "./pages/CreateQuestionsPage/CreateQuestions";
 import QuizPoll from "./pages/QuizPollPage/QuizPoll";
 import QuestionAnalysis from "./pages/QuestionAnalysisPage/QuestionAnalysis";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 function App() {
   return (
@@ -15,16 +16,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginRegister />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/analytics" element={<Analytics />}>
-            <Route
-              path="/analytics/questionAnalysis"
-              element={<QuestionAnalysis />}
-            />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/analytics" element={<Analytics />}>
+              <Route
+                path="/analytics/questionAnalysis"
+                element={<QuestionAnalysis />}
+              />
+            </Route>
+            <Route path="/createActivity" element={<Activity />} />
+            <Route path="/createQuestions" element={<CreateQuestions />} />
+            <Route path="/quiz/:id" element={<QuizPoll />} />
           </Route>
-          <Route path="/createActivity" element={<Activity />} />
-          <Route path="/createQuestions" element={<CreateQuestions />} />
-          <Route path="/quiz/:id" element={<QuizPoll />} />
         </Routes>
       </BrowserRouter>
       <ToastContainerComponent />
