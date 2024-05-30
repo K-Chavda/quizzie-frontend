@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RegisterUser } from "../../../api/user";
-import { showToast, promiseToast } from "../../../components/Toast/Toast";
+import { promiseToast } from "../../../components/Toast/Toast";
 
 import styles from "./Register.module.css";
 
