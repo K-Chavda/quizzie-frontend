@@ -25,6 +25,7 @@ const LoginUser = async (email, password) => {
       email,
       password,
     });
+
     return response.data;
   } catch (error) {
     showToast(

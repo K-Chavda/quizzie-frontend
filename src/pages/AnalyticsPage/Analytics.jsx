@@ -25,9 +25,7 @@ function Analytics() {
         setActivitiesData(activity);
         return activity;
       })
-      .catch((error) => {
-        throw error;
-      });
+      .catch((error) => {});
 
     promiseToast(getActivityPromise, {
       pending: "Loading activities...",
