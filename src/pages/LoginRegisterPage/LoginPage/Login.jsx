@@ -39,7 +39,7 @@ function Login() {
     const loginPromise = LoginUser(email, password)
       .then((response) => {
         localStorage.setItem("token", response.token);
-        localStorage.setItem("userId", response.data.id || response.data[0].id);
+        localStorage.setItem("userId", response.data?.id);
         navigate("/dashboard");
         return response;
       })
