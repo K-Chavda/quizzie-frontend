@@ -78,7 +78,10 @@ function Register({ setActiveTab }) {
       return;
     }
 
-    await RegisterUser({ name, email, password, setActiveTab });
+    await RegisterUser(name, email, password).then((response) => {
+      showToast(response.message, "success");
+      setActiveTab("Login");
+    });
   };
 
   return (

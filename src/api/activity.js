@@ -56,8 +56,11 @@ const GetQuestionData = async (activityId) => {
       showToast("Failed to fetch activity data", "error");
     }
   } catch (error) {
-    console.error("Error fetching activity data:", error);
-    showToast("Failed to fetch activity data", "error");
+    showToast(
+      error.response?.data?.message ||
+        "Something went wrong while fetching the activity!",
+      "error"
+    );
   }
 };
 

@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import FormatDate from "../../utils/FormatDate";
 import { groupIcon } from "../../assets/icons";
 import { GetAnalytics, GetTrendingQuiz } from "../../api/activity";
+import { promiseToast } from "../../components/Toast/Toast";
 
 const Dashboard = () => {
   const [analytics, setAnalytics] = useState({
@@ -16,20 +17,40 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await GetAnalytics().then((response) => {
-        const { totalImpressions, totalQuestions, totalQuizzesAndPolls } =
-          response;
+      const getAnalyticsPromise = GetAnalytics()
+        .then((response) => {
+          const { totalImpressions, totalQuestions, totalQuizzesAndPolls } =
+            response;
 
-        setAnalytics({
-          totalImpressions,
-          totalQuestions,
-          totalQuizzesAndPolls,
+          setAnalytics({
+            totalImpressions,
+            totalQuestions,
+            totalQuizzesAndPolls,
+          });
+
+          return response;
+        })
+        .catch((error) => {
+          throw error;
         });
+
+      promiseToast(getAnalyticsPromise, {
+        pending: "Loading analytics data...",
       });
 
-      await GetTrendingQuiz().then((response) => {
-        const { trendingQuiz } = response;
-        setTrending({ trendingQuiz });
+      const getTrendingQuizPromise = GetTrendingQuiz()
+        .then((response) => {
+          const { trendingQuiz } = response;
+          setTrending({ trendingQuiz });
+
+          return response;
+        })
+        .catch((error) => {
+          throw error;
+        });
+
+      promiseToast(getTrendingQuizPromise, {
+        pending: "Loading trending quizzes...",
       });
     };
 

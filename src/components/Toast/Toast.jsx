@@ -32,4 +32,12 @@ const ToastContainerComponent = () => {
   );
 };
 
-export { ToastContainerComponent, showToast };
+const promiseToast = (promise, message) => {
+  toast.promise(promise, {
+    pending: message.pending,
+    success: message.success,
+    error: message.error,
+  });
+};
+
+export { ToastContainerComponent, showToast, promiseToast };

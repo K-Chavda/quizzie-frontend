@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginUser } from "../../../api/user";
+import { promiseToast } from "../../../components/Toast/Toast";
 
 import styles from "./Login.module.css";
 
@@ -35,7 +36,22 @@ function Login() {
     const { email, password } = value;
     if (!email || !password) return;
 
-    await LoginUser({ email, password, navigate });
+    const loginPromise = LoginUser(email, password)
+      .then((response) => {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("userId", response.data[0].id);
+        navigate("/dashboard");
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    promiseToast(loginPromise, {
+      pending: "Please wait while logging you in...",
+      success: "Welcome to QUIZZIE",
+      error: "Login failed 🤯",
+    });
   };
 
   return (

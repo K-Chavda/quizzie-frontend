@@ -5,7 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { GetActivity, DeleteActivity } from "../../api/activity";
 
 import styles from "./Analytics.module.css";
-import { showToast } from "../../components/Toast/Toast";
+import { showToast, promiseToast } from "../../components/Toast/Toast";
 
 function Analytics() {
   const location = useLocation();
@@ -20,8 +20,17 @@ function Analytics() {
   }, []);
 
   const fetchData = async () => {
-    GetActivity().then((activity) => {
-      setActivitiesData(activity);
+    const getActivityPromise = GetActivity()
+      .then((activity) => {
+        setActivitiesData(activity);
+        return activity;
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    promiseToast(getActivityPromise, {
+      pending: "Loading activities...",
     });
   };
 
