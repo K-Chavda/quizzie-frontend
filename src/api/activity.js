@@ -147,7 +147,10 @@ const IncreaseImpressionCount = async (id, questionId) => {
 
     return response;
   } catch (error) {
-    showToast(error.response?.data?.message || "Something Went Wrong!");
+    showToast(
+      error.response?.data?.message || "Something Went Wrong!",
+      "error"
+    );
   }
 };
 
@@ -156,7 +159,10 @@ const GetQuizData = async (id) => {
     const response = await axios.get(`${BASE_URL}/activity/${id}`);
     return response.data.data;
   } catch (error) {
-    showToast(error.response?.data?.message || "Something Went Wrong!");
+    showToast(
+      error.response?.data?.message || "Something Went Wrong!",
+      "error"
+    );
   }
 };
 
@@ -167,7 +173,10 @@ const IncreaseAnswerCount = async (id, questionId, type) => {
     );
     return response.data.data;
   } catch (error) {
-    showToast(error.response?.data?.message || "Something Went Wrong!");
+    showToast(
+      error.response?.data?.message || "Something Went Wrong!",
+      "error"
+    );
   }
 };
 
@@ -179,7 +188,10 @@ const IncreaseOptionImpression = async (id, questionId, optionId) => {
 
     return response;
   } catch (error) {
-    showToast(error.response?.data?.message || "Something Went Wrong!");
+    showToast(
+      error.response?.data?.message || "Something Went Wrong!",
+      "error"
+    );
   }
 };
 

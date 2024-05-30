@@ -30,28 +30,20 @@ const Dashboard = () => {
 
           return response;
         })
-        .catch((error) => {
-          throw error;
-        });
+        .catch((error) => {});
 
       promiseToast(getAnalyticsPromise, {
         pending: "Loading analytics data...",
       });
 
-      const getTrendingQuizPromise = GetTrendingQuiz()
+      await GetTrendingQuiz()
         .then((response) => {
           const { trendingQuiz } = response;
           setTrending({ trendingQuiz });
 
           return response;
         })
-        .catch((error) => {
-          throw error;
-        });
-
-      promiseToast(getTrendingQuizPromise, {
-        pending: "Loading trending quizzes...",
-      });
+        .catch((error) => {});
     };
 
     fetchData();
