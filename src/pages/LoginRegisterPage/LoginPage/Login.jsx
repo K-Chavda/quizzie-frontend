@@ -50,7 +50,6 @@ function Login() {
     promiseToast(loginPromise, {
       pending: "Please wait while logging you in...",
       success: "Welcome to QUIZZIE",
-      error: "Login failed 🤯",
     });
   };
 

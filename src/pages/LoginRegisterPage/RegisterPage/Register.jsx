@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RegisterUser } from "../../../api/user";
+import { showToast, promiseToast } from "../../../components/Toast/Toast";
 
 import styles from "./Register.module.css";
 
@@ -78,9 +79,18 @@ function Register({ setActiveTab }) {
       return;
     }
 
-    await RegisterUser(name, email, password).then((response) => {
-      showToast(response.message, "success");
-      setActiveTab("Login");
+    const registerUserPromise = RegisterUser(name, email, password)
+      .then((response) => {
+        setActiveTab("Login");
+        return response.message;
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    promiseToast(registerUserPromise, {
+      pending: "Please wait while registering user...",
+      success: "User Registered Successfully",
     });
   };
 
