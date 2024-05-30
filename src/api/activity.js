@@ -12,7 +12,6 @@ const GetActivity = async () => {
 
     return response.data?.data?.activity;
   } catch (error) {
-    console.log(error);
     showToast(
       error.response?.data?.message ||
         "Something went wrong while fetching activities!",
