@@ -37,7 +37,7 @@ const DeleteActivity = async (activityId) => {
 const GetSingleActivity = async (activityId) => {
   try {
     const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     showToast(
       error.response?.data?.message ||
@@ -51,7 +51,7 @@ const GetQuestionData = async (activityId) => {
   try {
     const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
     if (response && response.data && response.data.success) {
-      return response.data.data;
+      return response.data?.data;
     } else {
       showToast("Failed to fetch activity data", "error");
     }
@@ -96,7 +96,7 @@ const GetAnalytics = async () => {
     const response = await axios.post(`${BASE_URL}/activity/analytics`, {
       userId: USERID,
     });
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     showToast(
       error.response?.data?.message || "Something Went Wrong!",
@@ -111,7 +111,7 @@ const GetTrendingQuiz = async () => {
       userId: USERID,
     });
 
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     showToast(
       error.response?.data?.message || "Something Went Wrong!",
@@ -157,7 +157,7 @@ const IncreaseImpressionCount = async (id, questionId) => {
 const GetQuizData = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/activity/${id}`);
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     showToast(
       error.response?.data?.message || "Something Went Wrong!",
@@ -171,7 +171,7 @@ const IncreaseAnswerCount = async (id, questionId, type) => {
     const response = await axios.put(
       `${BASE_URL}/activity/activities/${id}/questions/${questionId}/increase-answer-count/${type}`
     );
-    return response.data.data;
+    return response.data?.data;
   } catch (error) {
     showToast(
       error.response?.data?.message || "Something Went Wrong!",
