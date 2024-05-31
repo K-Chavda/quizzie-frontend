@@ -5,15 +5,13 @@ import QuizAnalysis from "./QuizAnalysisPage/QuizAnalysis";
 import PollAnalysis from "./PollAnalysisPage/PollAnalysis";
 import FormatDate from "../../utils/FormatDate";
 import { useLocation } from "react-router-dom";
-import { GetQuestionAnalytics } from "../../api/activity";
+import { GetQuestionAnalytics, GetActivity } from "../../api/activity";
 
 const QuestionAnalysis = ({ data }) => {
   const location = useLocation();
   const [activityId, setActivityId] = useState("");
   const [questionData, setQuestionData] = useState({});
-  const [impression, setImpression] = useState(
-    (location.state && location.state.impression) || 0
-  );
+  const [impression, setImpression] = useState(0);
 
   useEffect(() => {
     if (location.state) {
@@ -26,6 +24,12 @@ const QuestionAnalysis = ({ data }) => {
       .then((response) => {
         const { activityAnalytics } = response.data;
         setQuestionData(activityAnalytics);
+      })
+      .catch((error) => {});
+
+    await GetActivity()
+      .then((response) => {
+        setImpression(response[0].impressions);
       })
       .catch((error) => {});
   };
