@@ -3,12 +3,20 @@ import { showToast } from "../components/Toast/Toast";
 import { BASE_URL, TOKEN, USERID } from "../utils/Constants";
 
 axios.defaults.headers.common["Authorization"] = TOKEN;
+const getToken = () => localStorage.getItem("token");
+const getUserId = () => localStorage.getItem("userId");
 
 const GetActivity = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/activity/activities`, {
-      userId: USERID,
-    });
+    const response = await axios.post(
+      `${BASE_URL}/activity/activities`,
+      {
+        userId: getUserId(),
+      },
+      {
+        headers: { Authorization: getToken() },
+      }
+    );
 
     return response.data?.data?.activity;
   } catch (error) {
@@ -22,7 +30,9 @@ const GetActivity = async () => {
 
 const DeleteActivity = async (activityId) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/activity/${activityId}`);
+    const response = await axios.delete(`${BASE_URL}/activity/${activityId}`, {
+      headers: { Authorization: getToken() },
+    });
 
     return response.data;
   } catch (error) {
@@ -36,7 +46,9 @@ const DeleteActivity = async (activityId) => {
 
 const GetSingleActivity = async (activityId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
+    const response = await axios.get(`${BASE_URL}/activity/${activityId}`, {
+      headers: { Authorization: getToken() },
+    });
     return response.data?.data;
   } catch (error) {
     showToast(
@@ -49,7 +61,9 @@ const GetSingleActivity = async (activityId) => {
 
 const GetQuestionData = async (activityId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/activity/${activityId}`);
+    const response = await axios.get(`${BASE_URL}/activity/${activityId}`, {
+      headers: { Authorization: getToken() },
+    });
     if (response && response.data && response.data.success) {
       return response.data?.data;
     } else {
@@ -73,17 +87,29 @@ const CreateOrModifyActivity = async ({
   try {
     let response;
     if (activityId) {
-      response = await axios.patch(`${BASE_URL}/activity/${activityId}`, {
-        title: quizName,
-        activityType: quizType,
-        questions: questions,
-      });
+      response = await axios.patch(
+        `${BASE_URL}/activity/${activityId}`,
+        {
+          title: quizName,
+          activityType: quizType,
+          questions: questions,
+        },
+        {
+          headers: { Authorization: getToken() },
+        }
+      );
     } else {
-      response = await axios.post(`${BASE_URL}/activity/create`, {
-        title: quizName,
-        activityType: quizType,
-        questions: questions,
-      });
+      response = await axios.post(
+        `${BASE_URL}/activity/create`,
+        {
+          title: quizName,
+          activityType: quizType,
+          questions: questions,
+        },
+        {
+          headers: { Authorization: getToken() },
+        }
+      );
     }
     return response.data;
   } catch (error) {
@@ -93,9 +119,15 @@ const CreateOrModifyActivity = async ({
 
 const GetAnalytics = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/activity/analytics`, {
-      userId: USERID,
-    });
+    const response = await axios.post(
+      `${BASE_URL}/activity/analytics`,
+      {
+        userId: getUserId(),
+      },
+      {
+        headers: { Authorization: getToken() },
+      }
+    );
 
     return response.data?.data;
   } catch (error) {
@@ -108,9 +140,15 @@ const GetAnalytics = async () => {
 
 const GetTrendingQuiz = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/activity/trending`, {
-      userId: USERID,
-    });
+    const response = await axios.post(
+      `${BASE_URL}/activity/trending`,
+      {
+        userId: getUserId(),
+      },
+      {
+        headers: { Authorization: getToken() },
+      }
+    );
 
     return response.data?.data;
   } catch (error) {
@@ -128,7 +166,10 @@ const GetQuestionAnalytics = async (activityId) => {
 
   try {
     const response = await axios.post(
-      `${BASE_URL}/activity/analytics/${activityId}`
+      `${BASE_URL}/activity/analytics/${activityId}`,
+      {
+        headers: { Authorization: getToken() },
+      }
     );
 
     return response.data;
@@ -143,7 +184,10 @@ const GetQuestionAnalytics = async (activityId) => {
 const IncreaseImpressionCount = async (id, questionId) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/increase-impression`
+      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/increase-impression`,
+      {
+        headers: { Authorization: getToken() },
+      }
     );
 
     return response;
@@ -157,7 +201,9 @@ const IncreaseImpressionCount = async (id, questionId) => {
 
 const GetQuizData = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/activity/${id}`);
+    const response = await axios.get(`${BASE_URL}/activity/${id}`, {
+      headers: { Authorization: getToken() },
+    });
     return response.data?.data;
   } catch (error) {
     showToast(
@@ -170,7 +216,10 @@ const GetQuizData = async (id) => {
 const IncreaseAnswerCount = async (id, questionId, type) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/increase-answer-count/${type}`
+      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/increase-answer-count/${type}`,
+      {
+        headers: { Authorization: getToken() },
+      }
     );
     return response.data?.data;
   } catch (error) {
@@ -184,7 +233,10 @@ const IncreaseAnswerCount = async (id, questionId, type) => {
 const IncreaseOptionImpression = async (id, questionId, optionId) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/option/${optionId}/increase-selection-count`
+      `${BASE_URL}/activity/activities/${id}/questions/${questionId}/option/${optionId}/increase-selection-count`,
+      {
+        headers: { Authorization: getToken() },
+      }
     );
 
     return response;
