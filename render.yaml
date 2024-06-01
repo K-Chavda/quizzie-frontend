@@ -1,0 +1,20 @@
+# Exported from Render on 2024-06-01T11:39:04Z
+services:
+- type: web
+  name: quizzie
+  runtime: node
+  repo: https://github.com/K-Chavda/quizzie-backend
+  plan: free
+  envVars:
+  - key: JWT_SECRET
+    sync: false
+  - key: CORS_ORIGINS
+    sync: false
+  - key: DATABASE_URI
+    sync: false
+  - key: PORT
+    sync: false
+  region: oregon
+  buildCommand: npm install
+  startCommand: npm run start
+version: "1"

@@ -9,10 +9,8 @@ import CreateQuestions from "./pages/CreateQuestionsPage/CreateQuestions";
 import QuizPoll from "./pages/QuizPollPage/QuizPoll";
 import QuestionAnalysis from "./pages/QuestionAnalysisPage/QuestionAnalysis";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
-import StartRenderServer from "./utils/StartRenderServer";
 
 function App() {
-  StartRenderServer();
   return (
     <>
       <BrowserRouter>
