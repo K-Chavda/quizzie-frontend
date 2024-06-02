@@ -11,6 +11,7 @@ function CreateQuestions() {
   const location = useLocation();
   const navigate = useNavigate();
   const { quizName, quizType } = location.state;
+  const [showActivityShare, setShowActivityShare] = useState(false);
 
   const activityId = location.state.activityId || "";
   const [selectedQuestion, setSelectedQuestion] = useState("");
@@ -168,7 +169,13 @@ function CreateQuestions() {
       questions,
     }).then((activity) => {
       showToast(activity.message, "success");
-      navigate("/dashboard");
+
+      navigate("/activityShare", {
+        state: {
+          activityId: activity?.data?._id,
+          activityType: activity?.data?.activityType,
+        },
+      });
     });
   };
 

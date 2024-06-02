@@ -19,7 +19,7 @@ const AnalyticsTable = ({ activityData, deleteActivity }) => {
   const handleShareClick = async (activityId) => {
     try {
       await navigator.clipboard.writeText(
-        `${import.meta.env.VITE_HOST}/quiz/${activityId}/`
+        `${import.meta.env.VITE_HOST}quiz/${activityId}/`
       );
       showToast("Copied to clipboard", "success");
     } catch (err) {

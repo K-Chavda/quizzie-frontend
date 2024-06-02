@@ -9,6 +9,7 @@ import CreateQuestions from "./pages/CreateQuestionsPage/CreateQuestions";
 import QuizPoll from "./pages/QuizPollPage/QuizPoll";
 import QuestionAnalysis from "./pages/QuestionAnalysisPage/QuestionAnalysis";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import ActivityShare from "./pages/ActivitySharePage/ActivityShare";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginRegister />} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/analytics" element={<Analytics />}>
               <Route
                 path="/analytics/questionAnalysis"
@@ -25,6 +26,7 @@ function App() {
               />
             </Route>
             <Route path="/createActivity" element={<Activity />} />
+            <Route path="/activityShare" element={<ActivityShare />} />
             <Route path="/createQuestions" element={<CreateQuestions />} />
             <Route path="/quiz/:id" element={<QuizPoll />} />
           </Route>

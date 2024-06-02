@@ -1,0 +1,92 @@
+@import url("../../index.css");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.mainContainer {
+  height: 100vh;
+  width: 100vw;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.modelContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modelContent {
+  height: 45%;
+  width: 60%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  position: relative;
+}
+
+.activityDetailsContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.modelCloseBtn {
+  position: absolute;
+  top: 1rem;
+  left: calc(100% - 2rem);
+  cursor: pointer;
+}
+
+.activityDetailsContainer span {
+  text-align: center;
+}
+
+.activityMessage {
+  font-size: 40px;
+  font-weight: 500;
+  color: #474444;
+}
+
+.link {
+  width: 90%;
+  height: 15%;
+  background-color: #ededed;
+  font-size: 25px;
+  font-weight: 500;
+  color: #474444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem 0.5rem;
+  border-radius: 10px;
+}
+
+.shareButton {
+  height: 2rem;
+  width: 12rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #60b84b;
+  color: #ffffff;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.shareButton:hover {
+  background-color: #5dad4a;
+}
