@@ -29,7 +29,11 @@ const QuestionAnalysis = ({ data }) => {
 
     await GetActivity()
       .then((response) => {
-        setImpression(response[0].impressions);
+        const activity = response.filter(
+          (activity) => activity._id === activityId
+        );
+
+        setImpression(activity[0].impressions);
       })
       .catch((error) => {});
   };
